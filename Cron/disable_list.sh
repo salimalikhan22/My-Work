@@ -16,6 +16,8 @@ for A in $(ls -l /home/master/applications/| grep "^d" | awk '{print $NF}'); do
 	fi; 
 	json_data="[$(IFS=,; echo "${array[*]}")]"
 	
-	echo "$json_data"	
+#	echo "$json_data"	
 	echo "$json_data" > /home/master/applications/$1/tmp/data.json
 done
+
+echo "$(cat /home/master/applications/$1/tmp/data.json)"
