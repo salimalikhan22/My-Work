@@ -4,8 +4,10 @@
 array=()
 
 for A in $(ls -l /home/master/applications/| grep "^d" | awk '{print $NF}'); do 
+	cd /home/master/applications
 	echo "Application: $A" 
-	cd /home/master/applications/$A/public_html/
+	if [ -d "$A" ] && [ ! -L "$A" ]; then	
+	cd $A/public_html/
 	if wp core is-installed; then 
 		wp config set DISABLE_WP_CRON true --raw
 		url=$(wp option get siteurl)
@@ -18,6 +20,7 @@ for A in $(ls -l /home/master/applications/| grep "^d" | awk '{print $NF}'); do
 	
 #	echo "$json_data"	
 	echo "$json_data" > /home/master/applications/$1/tmp/data.json
+	fi
 done
 
 echo "$(cat /home/master/applications/$1/tmp/data.json)"
