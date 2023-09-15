@@ -14,8 +14,8 @@ for folder_name in "$@"; do
 	echo "Application: $app" 
 		cd /home/master/applications/$app/public_html/
 		if wp core is-installed; then 
-			wp config set DISABLE_WP_CRON true --raw
-			url=$(wp option get siteurl)
+			wp config set DISABLE_WP_CRON true --raw --skip-themes --skip-plugins
+			url=$(wp option get siteurl --skip-themes --skip-plugins)
 			line=$(cat /home/master/applications/$app/conf/server.nginx)
 			domain=$(echo "$line" | grep -oE '[a-zA-Z0-9-]+\.cloudwaysapps\.com' | awk '{print $1}')
 			data_json="{\"FQDN\": \"$domain\", \"URL\": \"$url\",\"APPNAME\": \"$app\" }"
