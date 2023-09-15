@@ -6,9 +6,11 @@ import re
 import requests
 import ast
 
-
+#####################################################TOKEN SAVED IN A VARIABLE ################################################
 token=sys.argv[1]
 #print(token)
+
+##################################################### READING OF DATA.JSON FILE ################################################
 
 with open('data.json', 'r') as file:
     json_data = json.load(file)
@@ -38,13 +40,13 @@ for item in json_data:
     # Append the modified object to the list
     modified_objects.append(new_object)
 
+############################### SAVED NEW OBJECT IN DATA JSON FILE WHICH NOW ALSO CONTAINS SERVER ID AND APP ID ###############################
+
 # Save the modified objects back to data.json
 with open('data.json', 'w') as file:
     json.dump(modified_objects, file, indent=4)
 
-# Print the modified objects
-#print(json.dumps(modified_objects, indent=4))
-
+######################## INITIATING GET REQUEST TO EXTRACT ALREADY EXISTED CRON AND EXECUTE LOOP TO ITERATE OVER ALL THE APPS USING DATA.JSON FILE ######################
 
 # Read JSON data from the data.json file
 with open('data.json', 'r') as file:
@@ -53,10 +55,6 @@ with open('data.json', 'r') as file:
 # Iterate over the list of JSON objects
 for json_object in data:
     # Work on one JSON object at a time
-#    print("FQDN:", json_object["FQDN"])
-#    print("URL:", json_object["URL"])
-#    print("server_id:", json_object["server_id"])
-#    print("app_id:", json_object["app_id"])
     server_id=json_object["server_id"]
     app_id=json_object["app_id"]
     url=json_object["URL"]
@@ -76,14 +74,15 @@ for json_object in data:
     if response.status_code == 200:
         # Request was successful, process the response here
         data = response.json()
-#        print("Response:", data)
         print("Successfully Get the Cron for App ID: {}, Appname: {}".format(app_id,appname))
     else:
         # Request failed
-#        print(f"Request failed with status code: {response.status_code}")
-#        print("Response content:", response.text)
         print("Failed to Get the Cron for App ID: {}, Appname: {}".format(app_id,appname))
+    
+######################################### GET REQUEST ENDED ADN THE RESPONSE IS SAVED IN A VARIABLE AS STRING ##########################################################
     response_str = str(response.json()) 
+
+######################################## ALTERATION OF THE STRING TO ONLY GET THE RESIRED PART ##################################################
 
 # Extract the 'script' part from the response
     response_dict = ast.literal_eval(response_str)  # Convert the string to a dictionary
@@ -94,13 +93,22 @@ for json_object in data:
     script_lines = [line.strip() for line in script_part.split('\n') if line.strip()]
 # Append the additional string to the end of the list
     additional_string = "*/5 * * * * wget -q -O - '{url}/wp-cron.php?doing_wp_cron' >/dev/null 2>&1"
+    string_to_check='{url}/wp-cron.php'
     additional_string=additional_string.replace("{url}", url)
-    
-    if additional_string not in script_lines:
+    string_to_check=string_to_check.replace("{url}", url)
+
+###################################### CONDITION TO CHECK IF CRON ALREADY EXISTS OR NOT IF IT EXISTS THEN DO NOT ADD CRON #######################################
+    exists = False
+    for strings in script_lines:
+        if string_to_check in strings:
+            exists=True
+            break
+
+    if not exists:
+
 
         script_lines.append(additional_string)
 # Print the formatted list of script lines
-#    print(script_lines)
     
         request_url = "https://api.cloudways.com/api/v1/app/manage/cronList"
 
@@ -132,8 +140,6 @@ for json_object in data:
             print("Successfully Added the Cron for App ID: {}, Appname: {}".format(app_id, appname))
         else:
         # Request failed
-    #    print(f"Request failed with status code: {response.status_code}")
-    #    print("Response content:", response.text)
             print("Failed to add the Cron for App ID: {}, Appname: {}".format(app_id, appname))
     else:
         print("Cron already Exists")

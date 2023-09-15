@@ -1,19 +1,5 @@
 [
     {
-        "app_id": "3498136",
-        "server_id": "955333",
-        "FQDN": "wordpress-955333-3498136.cloudwaysapps.com",
-        "URL": "https://wordpress-955333-3498136.cloudwaysapps.com",
-        "APPNAME": "dmsnpvncvg"
-    },
-    {
-        "app_id": "3333687",
-        "server_id": "955333",
-        "FQDN": "wordpress-955333-3333687.cloudwaysapps.com",
-        "URL": "https://salim.cloudns.ph",
-        "APPNAME": "fnasnhntac"
-    },
-    {
         "app_id": "3498125",
         "server_id": "955333",
         "FQDN": "wordpress-955333-3498125.cloudwaysapps.com",
