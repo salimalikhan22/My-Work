@@ -63,7 +63,8 @@ fi
 
 if [ "$all_option" = true ]; then
   echo "Running with --all option."
-
+list_option=""
+file_option=""
   
 for A in $(ls -l /home/master/applications/| grep "^d" | awk '{print $NF}'); do
 	cd /home/master/applications
@@ -96,6 +97,9 @@ fi
 
 if [ -n "$list_option" ]; then
   echo "Running with --list option: $list_option"
+
+file_option=""
+
 # Set the IFS to ',' to split the string
 IFS=','
 
