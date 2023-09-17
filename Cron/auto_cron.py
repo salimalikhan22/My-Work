@@ -78,6 +78,7 @@ for json_object in data:
     else:
         # Request failed
         print("Failed to Get the Cron for App ID: {}, Appname: {}".format(app_id,appname))
+        print(response.json)
         exit(1)   
 ######################################### GET REQUEST ENDED ADN THE RESPONSE IS SAVED IN A VARIABLE AS STRING ##########################################################
     response_str = str(response.json()) 
@@ -141,6 +142,7 @@ for json_object in data:
         else:
         # Request failed
             print("Failed to add the Cron for App ID: {}, Appname: {}".format(app_id, appname))
+            print(response.json)
             exit(1)
     else:
         print("Cron already Exists")
