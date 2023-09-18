@@ -265,13 +265,13 @@ for json_object in data:
 # Check the response
     if response.status_code == 200:
         # Request was successful, process the response here
-        data = response.json()
-        print("Successfully Get the Cron for App ID: {}, Appname: {}".format(app_id,appname))
+      data = response.json()
+      print("Successfully Get the Cron for App ID: {}, Appname: {}".format(app_id,appname))
     else:
         # Request failed
-	print("Failed to Get the Cron for App ID: {}, Appname: {}".format(app_id,appname))
-	print(response.json)
-	exit(1)
+	    print("Failed to Get the Cron for App ID: {}, Appname: {}".format(app_id,appname))
+	    print(response.json)
+	    exit(1)
 ######################################### GET REQUEST ENDED ADN THE RESPONSE IS SAVED IN A VARIABLE AS STRING ##########################################################
     response_str = str(response.json()) 
 
@@ -282,7 +282,7 @@ for json_object in data:
     script_part = response_dict.get('script')  # Get the 'script' value or an empty string if not found
 
 # Split the 'script' part into a list of lines
-#    script_lines = script_part.split('\n')
+#   script_lines = script_part.split('\n')
     script_lines = [line.strip() for line in script_part.split('\n') if line.strip()]
 # Append the additional string to the end of the list
     additional_string = "*/5 * * * * wget -q -O - '{url}/wp-cron.php?doing_wp_cron' >/dev/null 2>&1"
@@ -298,8 +298,6 @@ for json_object in data:
             break
 
     if not exists:
-
-
         script_lines.append(additional_string)
 # Print the formatted list of script lines
     
@@ -310,7 +308,7 @@ for json_object in data:
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": f"Bearer {token}",
             "Accept": "application/json",
-        }
+          }
 
         crons = json.dumps(script_lines)
 
@@ -320,7 +318,7 @@ for json_object in data:
             "app_id": app_id,
             "crons": crons,
             "is_script": "True",
-        }
+          }
 
 # Send the POST request
         response = requests.post(request_url, headers=headers, data=data)
@@ -328,14 +326,14 @@ for json_object in data:
 # Check the response
         if response.status_code == 200:
         # Request was successful, process the response here
-            data = response.json()
-            print("Response:", data)
-            print("Successfully Added the Cron for App ID: {}, Appname: {}".format(app_id, appname))
+          data = response.json()
+          print("Response:", data)
+          print("Successfully Added the Cron for App ID: {}, Appname: {}".format(app_id, appname))
         else:
         # Request failed
-	    print("Failed to add the Cron for App ID: {}, Appname: {}".format(app_id, appname))
-	    print(response.json)
-	    exit(1)
+	        print("Failed to add the Cron for App ID: {}, Appname: {}".format(app_id, appname))
+	        print(response.json)
+	        exit(1)
     else:
         print("Cron already Exists")
 
